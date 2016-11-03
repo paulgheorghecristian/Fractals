@@ -22,6 +22,7 @@ class Shader
         void loadMatrix(GLuint, glm::mat4);
         void loadProjectionMatrix(glm::mat4);
         void loadModelMatrix(glm::mat4);
+        void loadViewMatrix(glm::mat4);
         void loadCoords(float, float, float, float);
         void loadMaxIter(int);
         void loadC(glm::vec2);
@@ -33,6 +34,7 @@ class Shader
         GLuint projMat_location, modelMat_location, colorVector_location, min_coords_location, max_coords_location;
         GLuint max_iter_location;
         GLuint c_location;
+        GLuint viewMat_location;
 };
 
 #endif // SHADER_H

@@ -96,3 +96,31 @@ Mesh* Mesh::get_rectangle_mesh(float x, float y, float width, float height){
 
     return new Mesh(vertices, indices);
 }
+
+Mesh* Mesh::get_surface(int width, int height){
+    std::vector<Vertex> vertices;
+    std::vector<unsigned int> indices;
+
+    float dw = 2.0f / (float)width;
+    float dh = 2.0f / (float)height;
+		//creeaza suprafata pentru apa
+    for(int i = 0; i < height; i++){
+        for(int j = 0; j < width; j++){
+            int first_index = 4*(j + i*width);
+            vertices.push_back(Vertex(glm::vec3(-1.0f + j * dw, 0.0f, 1.0f - i * dh)));
+            vertices.push_back(Vertex(glm::vec3(-1.0f + j * dw, 0.0f, 1.0f - (i+1) * dh)));
+            vertices.push_back(Vertex(glm::vec3(-1.0f + (j+1) * dw, 0.0f, 1.0f - (i+1) * dh)));
+            vertices.push_back(Vertex(glm::vec3(-1.0f + (j+1) * dw, 0.0f, 1.0f - i * dh)));
+
+            indices.push_back(first_index);
+            indices.push_back(first_index+1);
+            indices.push_back(first_index+2);
+
+            indices.push_back(first_index);
+            indices.push_back(first_index+2);
+            indices.push_back(first_index+3);
+
+        }
+    }
+    return new Mesh(vertices, indices);
+}

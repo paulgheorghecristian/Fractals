@@ -38,10 +38,14 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="camera.cpp" />
+		<Unit filename="camera.h" />
 		<Unit filename="display.cpp" />
 		<Unit filename="display.h" />
 		<Unit filename="entity.cpp" />
 		<Unit filename="entity.h" />
+		<Unit filename="framebuffer.cpp" />
+		<Unit filename="framebuffer.h" />
 		<Unit filename="input.cpp" />
 		<Unit filename="input.h" />
 		<Unit filename="main.cpp" />

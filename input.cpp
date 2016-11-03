@@ -1,6 +1,6 @@
 #include "input.h"
 
-Input::Input()
+Input::Input() : mousePosition(0.0)
 {
     for(unsigned int i = 0; i < NUMKEYS; i++){
         downKeys[i] = false;
@@ -19,7 +19,7 @@ Input::~Input()
     //dtor
 }
 
-void Input::update(){
+void Input::update(SDL_Window *window){
     SDL_Event event;
 
     for(unsigned int i = 0; i < NUMKEYS; i++){
@@ -41,13 +41,22 @@ void Input::update(){
                 if(event.key.keysym.sym < 1024 && event.key.keysym.sym >= 0){
                     downKeys[event.key.keysym.sym] = true;
                     inputs[event.key.keysym.sym] = true;
+                }else if(event.key.keysym.sym >= 1073741903){
+                    int key = event.key.keysym.sym - 1073741903;
+                    downKeys[key] = true;
+                    inputs[key] = true;
                 }
+
                 break;
             }
             case SDL_KEYUP:{
                 if(event.key.keysym.sym < 1024 && event.key.keysym.sym >= 0){
                     upKeys[event.key.keysym.sym] = true;
                     inputs[event.key.keysym.sym] = false;
+                }else if(event.key.keysym.sym >= 1073741903){
+                    int key = event.key.keysym.sym - 1073741903;
+                    upKeys[key] = true;
+                    inputs[key] = false;
                 }
                 break;
             }
@@ -63,10 +72,12 @@ void Input::update(){
             }
             case SDL_MOUSEMOTION:{
                 mousePosition = glm::vec2(event.motion.x, event.motion.y);
+                delta = glm::vec2(540, 360) - mousePosition;
                 break;
             }
         }
     }
+    SDL_WarpMouseInWindow(window, 540, 360);
 }
 
 bool Input::GetKeyDown(int key){
@@ -90,3 +101,8 @@ bool Input::GetMouse(int key){
 glm::vec2 Input::GetMousePos(){
     return mousePosition;
 }
+
+glm::vec2 Input::GetMouseDelta(){
+    return delta;
+}
+

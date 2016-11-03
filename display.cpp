@@ -83,3 +83,7 @@ glm::mat2 Display::get_2D_transform_matrix(float ferx, float fery, float widthfe
 float Display::get_delta(){
     return delta/1000.0f;
 }
+
+SDL_Window* Display::getWindow(){
+    return window;
+}

@@ -9,7 +9,7 @@ class Input
 {
     public:
         Input();
-        void update();
+        void update(SDL_Window*);
         bool GetKeyDown(int);
         bool GetKeyUp(int);
         bool GetKey(int);
@@ -17,6 +17,7 @@ class Input
         bool GetMouseUp(int);
         bool GetMouse(int);
         glm::vec2 GetMousePos();
+        glm::vec2 GetMouseDelta();
         virtual ~Input();
     protected:
     private:
@@ -28,7 +29,7 @@ class Input
         bool inputMouse[NUMMOUSE];
         bool downMouse[NUMMOUSE];
         bool upMouse[NUMMOUSE];
-        glm::vec2 mousePosition;
+        glm::vec2 mousePosition, lastMousePosition, delta;
 };
 
 #endif // INPUT_H

@@ -19,6 +19,7 @@ class Display
 		float, float, float, float);
         static float get_delta();
         static bool isWindowClosed;
+        SDL_Window* getWindow();
     protected:
     private:
         SDL_Window *window;

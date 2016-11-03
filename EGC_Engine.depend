@@ -166,3 +166,107 @@
 	<math.h>
 	"texture.h"
 
+1478176721 source:/home/paul/Desktop/Proiecte/Fractals/display.cpp
+	"display.h"
+
+1478176732 /home/paul/Desktop/Proiecte/Fractals/display.h
+	<SDL2/SDL.h>
+	<iostream>
+	<GL/glew.h>
+	<glm/glm.hpp>
+
+1475060594 source:/home/paul/Desktop/Proiecte/Fractals/entity.cpp
+	"entity.h"
+
+1446840374 /home/paul/Desktop/Proiecte/Fractals/entity.h
+	"mesh.h"
+	<glm/glm.hpp>
+	"shader.h"
+	<GL/glew.h>
+	<glm/gtc/matrix_transform.hpp>
+	<string>
+	<vector>
+
+1478176008 /home/paul/Desktop/Proiecte/Fractals/mesh.h
+	<GL/glew.h>
+	<glm/glm.hpp>
+	<vector>
+
+1478174647 /home/paul/Desktop/Proiecte/Fractals/shader.h
+	<stdlib.h>
+	<stdio.h>
+	<string>
+	<fstream>
+	<iostream>
+	<GL/glew.h>
+	<string.h>
+	<glm/glm.hpp>
+
+1478176586 source:/home/paul/Desktop/Proiecte/Fractals/input.cpp
+	"input.h"
+
+1478176601 /home/paul/Desktop/Proiecte/Fractals/input.h
+	<SDL2/SDL.h>
+	"display.h"
+	<glm/glm.hpp>
+
+1478175993 source:/home/paul/Desktop/Proiecte/Fractals/mesh.cpp
+	"mesh.h"
+
+1446981681 source:/home/paul/Desktop/Proiecte/Fractals/physics.cpp
+	"physics.h"
+
+1446248441 /home/paul/Desktop/Proiecte/Fractals/physics.h
+	"entity.h"
+
+1478174418 source:/home/paul/Desktop/Proiecte/Fractals/shader.cpp
+	"shader.h"
+	<glm/gtc/type_ptr.hpp>
+
+1478169824 source:/home/paul/Desktop/Proiecte/Fractals/texture.cpp
+	"texture.h"
+
+1478169835 /home/paul/Desktop/Proiecte/Fractals/texture.h
+	<string>
+	<SDL2/SDL.h>
+	<stdlib.h>
+	<iostream>
+	<GL/glew.h>
+
+1450177308 source:/home/paul/Desktop/Proiecte/Fractals/framebuffer.cpp
+	"framebuffer.h"
+
+1449762780 /home/paul/Desktop/Proiecte/Fractals/framebuffer.h
+	<GL/glew.h>
+	<iostream>
+
+1478177340 source:/home/paul/Desktop/Proiecte/Fractals/main.cpp
+	<iostream>
+	"display.h"
+	"shader.h"
+	"mesh.h"
+	<vector>
+	<glm/gtc/matrix_transform.hpp>
+	"entity.h"
+	<vector>
+	"input.h"
+	<time.h>
+	<stdlib.h>
+	<stdio.h>
+	"physics.h"
+	<math.h>
+	"texture.h"
+	"framebuffer.h"
+	"camera.h"
+
+1472978660 source:/home/paul/Desktop/Proiecte/Fractals/camera.cpp
+	"camera.h"
+
+1472906366 /home/paul/Desktop/Proiecte/Fractals/camera.h
+	<glm/glm.hpp>
+	<SDL2/SDL.h>
+	"input.h"
+	<iostream>
+	"display.h"
+	<glm/gtc/matrix_transform.hpp>
+

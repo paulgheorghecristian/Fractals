@@ -32,6 +32,7 @@ class Mesh
         GLsizei get_no_triangles();
         static Mesh* get_circle_mesh(float, float, float, const int);
         static Mesh* get_rectangle_mesh(float, float, float, float);
+        static Mesh* get_surface(int width, int height);
         virtual ~Mesh();
     protected:
     private:

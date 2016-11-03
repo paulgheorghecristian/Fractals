@@ -64,13 +64,12 @@ Shader::Shader(const std::string& path)
 void Shader::getAllUniformLocations(){
     //caut in shader-e uniformele respective
     projMat_location = glGetUniformLocation(program, "projection_matrix");
+    viewMat_location = glGetUniformLocation(program, "view_matrix");
     modelMat_location = glGetUniformLocation(program, "model_matrix");
     colorVector_location = glGetUniformLocation(program, "color_vector");
-    min_coords_location = glGetUniformLocation(program, "min_coords");
-    max_coords_location = glGetUniformLocation(program, "max_coords");
     max_iter_location = glGetUniformLocation(program, "max_iter");
-    glUniform1i(glGetUniformLocation(program, "colors"), 0);
     c_location = glGetUniformLocation(program, "c");
+    glUniform1i(glGetUniformLocation(program, "fractalHeightmap"), 0);
 }
 
 void Shader::loadMaxIter(int iter){
@@ -96,6 +95,10 @@ void Shader::loadProjectionMatrix(glm::mat4 matrix){
 
 void Shader::loadModelMatrix(glm::mat4 matrix){
     loadMatrix(modelMat_location, matrix);
+}
+
+void Shader::loadViewMatrix(glm::mat4 matrix){
+    loadMatrix(viewMat_location, matrix);
 }
 
 void Shader::loadMatrix(GLuint location, glm::mat4 matrix){

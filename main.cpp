@@ -13,100 +13,113 @@
 #include "physics.h"
 #include <math.h>
 #include "texture.h"
+#include "framebuffer.h"
+#include "camera.h"
+
+#define DIM_X 1920.0f
+#define DIM_Y 1080.0f
 
 int main()
 {
-    const float WIDTH = 1920.0f;
-    const float HEIGHT = 1080.0f;
+    const float WIDTH = 1080.0f;
+    const float HEIGHT = 720.0f;
 
     Display display((int)WIDTH, (int)HEIGHT,"OpenGL");
-    Shader shader("res/shaders/julia");
+    Shader fractalShader("res/shaders/julia");
+    Shader shader("res/shaders");
+    Camera cam(glm::vec3(0, 100, 0), 0, -45, 0);
     Input input;
+    Framebuffer fractalFramebuffer(DIM_X, DIM_Y);
+    Texture fractal(fractalFramebuffer.get_texture_id());
 
     display.set_viewport(0.0f, 0.0f, WIDTH, HEIGHT);
 
     Mesh* mesh = Mesh::get_rectangle_mesh(0.0f, 0.0f, 1.0f, 1.0f);
+    Mesh* hillMesh = Mesh::get_surface(500, 500);
 
     Entity* rectangle = new Entity("rectangle",
                                     mesh,
                                     glm::vec4(1.0f, 0.0f, 0.0, 1.0f),
                                     glm::vec3(0,0,0),
                                     glm::vec3(0.0f, 0.0f, 0.0f),
-                                    glm::vec3(WIDTH, HEIGHT, 1.0f));
+                                    glm::vec3(DIM_X, DIM_Y, 1.0f));
 
+    Entity* hill = new Entity("hill",
+                                hillMesh,
+                                glm::vec4(1.0f, 0.0f, 0.0, 1.0f),
+                                glm::vec3(0,0,0),
+                                glm::vec3(0.0f, 0.0f, 0.0f),
+                                glm::vec3(DIM_X, 50.0f, DIM_Y));
     shader.bind();
-    glm::mat4 projMat = glm::ortho(0.0f, WIDTH, 0.0f, HEIGHT);
-    shader.loadProjectionMatrix(projMat);
+    shader.loadProjectionMatrix(glm::perspective(75.0f, WIDTH/HEIGHT, 1.0f, 2000.0f));
+    shader.loadViewMatrix(cam.get_view_matrix());
+
+    fractalShader.bind();
+    fractalShader.loadProjectionMatrix(glm::ortho(0.0f, DIM_X, 0.0f, DIM_Y));
 
     glm::vec2 c(0, 0);
 
-    glm::vec2 min_coords(0, 0);
-    glm::vec2 max_coords(2, 2);
-
-    glm::vec2 center;
-
-    glm::vec2 focus(-0.743, 0.1);
-
-    glm::vec2 real_min_coords;
-    glm::vec2 real_max_coords;
-
     int max_iter = 1000;
-    shader.loadMaxIter(max_iter);
-
-    Texture t("res/textures/pal.bmp");
+    fractalShader.loadMaxIter(max_iter);
 
     while(!display.isClosed()){
         display.clear(1.0f, 1.0f, 1.0f, 1.0f);
-        input.update();
+        display.set_viewport(0, 0, DIM_X, DIM_Y);
+        input.update(display.getWindow());
 
-        shader.bind();
-        t.use(0);
-        center = glm::vec2((max_coords.x + min_coords.x) / 2.0f, (max_coords.y + min_coords.y) / 2.0f);
-        real_min_coords = glm::vec2(min_coords.x + (focus.x - center.x), min_coords.y + (focus.y - center.y));
-        real_max_coords = glm::vec2(max_coords.x + (focus.x - center.x), max_coords.y + (focus.y - center.y));
-        shader.loadCoords(real_min_coords.x, real_min_coords.y, real_max_coords.x, real_max_coords.y);
-        if(input.GetKeyDown(SDLK_w)){
-            max_coords /= 1.05f;
-        }
-        if(input.GetKeyDown(SDLK_s)){
-            max_coords *= 1.05f;
-        }
-        if(input.GetKeyDown(SDLK_a)){
-            focus.x -= 0.01f;
-        }
-        if(input.GetKeyDown(SDLK_d)){
-            focus.x += 0.01f;
-        }
-
-        if(input.GetKeyDown(SDLK_z)){
-            max_iter += 10;
-            shader.loadMaxIter(max_iter);
-        }
-        if(input.GetKeyDown(SDLK_x)){
-            max_iter -= 10;
-            shader.loadMaxIter(max_iter);
-        }
-
+        fractalFramebuffer.bind();
+        fractalShader.bind();
         if(input.GetKeyDown(SDLK_1)){
-            c.x += 0.01;
+            c.x += 0.001;
         }
         if(input.GetKeyDown(SDLK_2)){
-            c.x -= 0.01;
+            c.x -= 0.001;
         }
         if(input.GetKeyDown(SDLK_3)){
-            c.y += 0.01;
+            c.y += 0.001;
         }
         if(input.GetKeyDown(SDLK_4)){
-            c.y -= 0.01;
+            c.y -= 0.001;
+        }
+        if(input.GetKeyDown(SDLK_5)){
+            max_iter += 50;
+        }
+        if(input.GetKeyDown(SDLK_6)){
+            max_iter -= 50;
+        }
+        fractalShader.loadMaxIter(max_iter);
+        fractalShader.loadC(c);
+        rectangle->draw(&fractalShader);
+        fractalFramebuffer.unbind();
+
+        display.clear(1.0f, 1.0f, 1.0f, 1.0f);
+        display.set_viewport(0, 0, WIDTH, HEIGHT);
+
+        if(input.GetKey(SDLK_w)){
+            cam.move_forward(400.0f * Display::get_delta());
+        }else if(input.GetKey(SDLK_s)){
+            cam.move_forward(-400.0f * Display::get_delta());
         }
 
-        std::cout << c.x << " " << c.y << std::endl;
+        if(input.GetKey(SDLK_a)){
+            cam.move_sideways(-400.0f * Display::get_delta());
+        }else if(input.GetKey(SDLK_d)){
+            cam.move_sideways(400.0f * Display::get_delta());
+        }
 
-        shader.loadC(c);
+        if(glm::abs(glm::length(input.GetMouseDelta())) > 0.3f){
+            cam.rotate_x(input.GetMouseDelta().y * 0.1f);
+            cam.rotate_y(input.GetMouseDelta().x * 0.1f);
+        }
 
-        rectangle->draw(&shader);
+        shader.bind();
+        fractal.use(0);
+        shader.loadProjectionMatrix(glm::perspective(75.0f, WIDTH/HEIGHT, 1.0f, 2000.0f));
+        shader.loadViewMatrix(cam.get_view_matrix());
+        hill->draw(&shader);
 
         display.update();
     }
     return 0;
 }
+

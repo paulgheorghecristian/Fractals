@@ -6,7 +6,20 @@ layout(location = 2) in vec2 in_texture;
 
 uniform mat4 projection_matrix;
 uniform mat4 model_matrix;
+uniform mat4 view_matrix;
+
+uniform sampler2D fractalHeightmap;
+
+out float outHeight;
 
 void main(){
-	gl_Position = projection_matrix * model_matrix * vec4(in_position, 1.0);
+	vec2 text_pos = (in_position.xz+1.0)/2.0;
+	vec4 height = texture(fractalHeightmap, text_pos);
+
+	vec3 new_position = in_position;
+	new_position.y = (height.r + height.g + height.b)/3.0;
+
+	outHeight = new_position.y;
+
+	gl_Position = projection_matrix * view_matrix * model_matrix * vec4(new_position, 1.0);
 }

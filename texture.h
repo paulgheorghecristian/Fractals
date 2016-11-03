@@ -11,12 +11,13 @@ class Texture
 {
     public:
         Texture(std::string);
+        Texture(GLuint);
+        GLuint get_texture_id();
         virtual ~Texture();
         void use(unsigned int);
     protected:
     private:
         GLuint texture_id;
-        GLuint get_texture_id();
 };
 
 #endif // TEXTURE_H

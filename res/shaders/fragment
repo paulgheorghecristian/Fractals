@@ -1,0 +1,46 @@
+#version 330 core
+
+out vec4 out_Color;
+uniform vec4 color_vector;
+
+uniform vec2 min_coords;
+uniform vec2 max_coords;
+
+uniform sampler2D colors;
+
+uniform int max_iter;
+
+vec2 mandelfunc(vec2 z, vec2 c){
+	return vec2(z.x * z.x - z.y * z.y + c.x, c.y + 2 * z.x * z.y);
+}
+
+//return vec2(z.x * z.x - z.y * z.y + c.x, c.y + 2 * z.x * z.y);
+
+void main(){
+	float WIDTH = 800.0f;
+	float HEIGHT = 600.0f;
+
+	float sx = (max_coords.x - min_coords.x) / WIDTH;
+	float sy = (max_coords.y - min_coords.y) / HEIGHT;
+	float tx = min_coords.x;
+	float ty = min_coords.y;
+
+	vec2 c;
+	c.x = gl_FragCoord.x * sx + tx;
+	c.y = gl_FragCoord.y * sy + ty;
+	
+	int iter = 0;
+
+	vec2 z = c;
+
+	while(iter < max_iter && z.x * z.x + z.y * z.y < 4){
+		z = mandelfunc(z, c);
+		iter++;
+	}
+
+	if(iter < max_iter){
+		out_Color = texture(colors, vec2(iter/250.0f, 0));
+	}else{
+		out_Color = vec4(0,0,0,1);
+	}	
+}

@@ -1,0 +1,49 @@
+Student: Gheorghe Paul Cristian Florian
+Grupa: 335CC
+
+Tema a fost realizata sub Linux Mint folosind SDL2(sudo apt-get install libsdl2-dev), GLEW(sudo apt-get install libglew-dev) si GLM(sudo apt-get install libglm-dev). IDE-ul folosit a fost CodeBlocks. Pentru compilare si rulare, am facut un makefile. make build creeaza executabilul, iar make run il executa.
+
+Utilizarea programului:
+
+Cu tastele "a" si "d" se schimba unghiul initial al razei, iar cu space se porneste simularea. Folosind mouse-ul se pot adauga sau sterge obiecte din scena astfel: pentru crearea de dreptunghiuri se apasa pe butonul din stanga al mouse-ului intr-un punct, apoi se muta cursorul pana in punctul dorit, creandu-se astfel un dreptunghi intre cele doua puncte. Culoarea, cat si transparenta dreptunghiului vor fi alese aleator. Pentru crearea unui cerc, se apasa intr-un punct butonul drept al mouse-ului. Pentru stergerea unui obiect se apasa pe butonul "delete" al tastaturii si se apasa pe acesta folosind butonul stang al mouse-ului. La a doua apasare a butonului "delete" se intra din nou in modul de creare de obiecte. Oprirea programului se face apasand butonul esc.
+
+
+Descrierea claselor:
+
+display:
+
+Clasa care foloseste SDL2 pentru a crea un context opengl, o fereastra si care initializeaza glew-ul. Aceasta se ocupa de afisarea frame buffer-ului pe ecran, stergerea ecranului la fiecare frame si limitarea FPS-ului. De asemenea, are o functia statica care returneaza o matrice pentru transformarea fereastra poarta.
+
+mesh:
+
+Aceasta clasa primeste un set de vertecsi si indici si ii trimite GPU-ului datele sub forma de octeti. De asemenea, ii explica opengl-ului cum ar trebui sa foloseasca acei octeti. Clasa are si doua functii statice pentru crearea a doua mesh-e, dreptunghi si cerc.
+
+physics:
+
+Se ocupa de coliziunile intre corpuri. Aceasta are doua functii statice, una pentru coliziune dreptunghi-dreptunghi, alta pentru coliziuni dreptunghi-raza, cerc-raza sau triunghi-raza.
+
+shader:
+
+Se ocupa de crearea, compilarea, link-editarea, bind-area shader-elor si detectia erorilor de sintaxa din codul acestora. De asemenea, se ocupa cu trimiterea variabilelor uniforme.
+
+entitiy:
+
+Clasa care incapsuleaza conceptul de obiect in scena. Aceasta primeste o mesh-a pe care o deseneaza cu ajutorul shader-elor dupa ce au fost aplicate transformari elementare asupra ei. Matricea model este creata de fiecare data cand se modifica un atribut al obiectului(pozitie, rotatie, scalare). Aceasta clasa creeaza un set de normale, in cazul in care obiectul este de tip dreptunghi.
+
+input:
+
+Face key buffering pentru detectarea corecta a apasarii tastelor. Necesita apelarea functiei update la fiecare frame.
+
+Descrierea fisierului main.cpp:
+
+Functia calculate_distance afla distanta de la un punct definit folosind variabilele x0 si y0 la o dreapta definita cu ajutorul variabilelor a, b si c (ax + by + c = 0). Cu WIDTH si HEIGHT setez dimensiunile ferestrei, apoi initializez diverse obiecte, iar la linia 53 creez scena propriu-zisa si trimit matricea de proiectie vertex shader-ului.
+La linia 84 incepe bucla principala a programului. In aceasta creez 2 viewport-uri si apelez metoda update de la clasa input. La linia 100 am pus conditia de oprire a razei(daca am deja 20 de raze sau am atins camera). De la linia 143 la linia 241 este codul pentru crearea obiectelor cu ajutorul mouse-ului. Daca, atunci cand se creeaza un obiect, acesta atinge alt obiect, ii preia culoarea, pentru a putea crea obiecte compuse.
+
+Algoritmul este urmatorul:
+
+La fiecare frame, cresc scalarea ultimei raze din vectorul beams(beams[beams.size()-1]). Cand aceasta a atins un obiect, calculez noul unghi al razei reflectate si adaug in vector noua raza. Pentru calcularea vectorului reflectat folosesc formula: v' = v - 2*(v*n)*n, unde v este vectorul razei incidenta, n este normala normalizata, iar v' este raza reflectata. Normalele dreptunghiurilor sunt hardcodate in clasa entity, in constructor, iar, la cerc, normala este vectorul format intre punctul de coliziune si centrul cercului respectiv.
+
+Bonusuri implementate:
+
+-posibilitatea de regenerare a scenei(adaugarea si stergerea obiectelor)
+-refractie
